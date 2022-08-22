@@ -1,4 +1,6 @@
 
+from pathlib import Path
+
 class CardSuit:
     """
     Represents a card suit
@@ -59,13 +61,15 @@ class CardDeck:
         self.suits = suits
         self.cards = cards
 
-    @staticmethod
-    def from_string(deck_file_content: str, cards_file_content: str):
+    @classmethod
+    def from_string(cls, deck_file_content: str, cards_file_content: str):
         """
-        Load the deck from the deck file and cards listing file
+        Load the deck from the deck file content and cards listing file content
         """
 
         # Get the individual lines from the deck file
+
+
         cards_file_name, card_count, *suit_values = deck_file_content.splitlines()
 
         # Get the number of cards required
@@ -97,33 +101,31 @@ class CardDeck:
             for card in cards
         }
 
-        return CardDeck(list(suits), cards)
+        return cls(list(suits), cards)
+
+    @classmethod
+    def from_file(cls, file_path: Path):
+        """
+        Load the deck from the file at the given path
+        """
+
+        deck_file_contents = file_path.read_text()
+        cards_file_name = deck_file_contents.splitlines()[0]
+
+        card_file = file_path.parent / cards_file_name
+        cards_file_contents = card_file.read_text()
+
+        return cls.from_string(deck_file_contents, cards_file_contents)
+
+
+
+
+        
 
     def __str__(self) -> str:
         return "\n".join([str(card) for card in self.cards])
 
 
 if __name__ == "__main__":
-    deck = """deck1.txt
-52
-A,Ace
-K,King
-Q,Queen
-J,Jack
-T,Ten
-9,Nine
-8,Eight
-7,Seven
-6,Six
-5,Five
-4,Four
-3,Three
-2,Two
-S,Spades
-H,Hearts
-D,Diamonds
-C,Clubs"""
-    cards = "ASKSQSJSTS9S8S7S6S5S4S3S2SAHKHQHJHTH9H8H7H6H5H4H3H2HADKDQDJDTD9D8D7D6D5D4D3D2DACKCQCJCTC9C8C7C6C5C4C3C2C"
-
-    d = CardDeck.from_string(deck, cards)
+    d = CardDeck.from_file(Path(__file__).parent / "games" / "bridge1.txt")
     print(d)
