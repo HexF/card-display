@@ -1,5 +1,7 @@
 
 from pathlib import Path
+import random
+from typing import Generator
 
 class CardSuit:
     """
@@ -48,7 +50,7 @@ class Card:
         self.compact_value = compact_value
         self.full_value = full_value       
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return f"{self.full_value} of {self.suit.name} ({self.compact_value}{self.suit.compact})"
 
 
@@ -59,7 +61,32 @@ class CardDeck:
 
     def __init__(self, suits: list[CardSuit], cards: list[Card]):
         self.suits = suits
-        self.cards = cards
+        self._cards = cards
+
+        self.shuffle()
+
+
+    def shuffle(self):
+        """
+        Collect back all the delt cards back into the deck, then shuffle the deck
+        """
+
+        self.cards = self._cards[::] # copy the list of cards
+        random.shuffle(self.cards)  # shuffle all the cards
+
+    def deal_card(self) -> Card:
+        """
+        Return a singular card from the deck
+        """
+        return self.cards.pop()
+
+    def deal_cards(self, n) -> Generator[None, Card, None]:
+        """
+        Return n cards from the deck
+        """
+        for _ in range(n):
+            yield self.deal_card()
+
 
     @classmethod
     def from_string(cls, deck_file_content: str, cards_file_content: str):
@@ -128,4 +155,7 @@ class CardDeck:
 
 if __name__ == "__main__":
     d = CardDeck.from_file(Path(__file__).parent / "games" / "bridge1.txt")
-    print(d)
+    
+
+    for card in d.deal_cards(5):
+        print(card)
