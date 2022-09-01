@@ -1,10 +1,8 @@
 import abc
 from pathlib import Path
 from typing import Generator, List
-from ..deck import Card, CardDeck
+from card_display.deck import Card, CardDeck
 
-
-# Abstract Base Class
 
 class Game(abc.ABC):
     hand_count: int

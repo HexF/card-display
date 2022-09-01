@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "card-display"
+version = "0.1.0"
+description = "Card Hand displayer tool (Programming & Process Assessment)"
+authors = ["Thomas Hobson <thomas@hexf.me>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "card_display"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+inquirer = "^2.10.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
