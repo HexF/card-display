@@ -37,7 +37,30 @@ class CardSuit:
         The name of the suit
         """
         return self.full_repr
-        
+
+    @property
+    def unicode_card_codepoint(self) -> int:
+        if self.compact_repr == "S":
+            return 0x1F0A1
+        elif self.compact_repr == "H":
+            return 0x1F0B1
+        elif self.compact_repr == "D":
+            return 0x1F0C1
+        elif self.compact_repr == "C":
+            return 0x1F0D1
+        raise TypeError("This card type does not have an associated card codepoint")
+
+    @property
+    def unicode_suit_char(self) -> str:
+        if self.compact_repr == "S":
+            return "♠"
+        elif self.compact_repr == "H":
+            return "♥"
+        elif self.compact_repr == "D":
+            return "♦"
+        elif self.compact_repr == "C":
+            return "♣"
+        raise TypeError("This card type does not have an associated card suit")
 
 class Card:
     """
@@ -53,6 +76,16 @@ class Card:
     def __repr__(self) -> str:
         return f"{self.full_value} of {self.suit.name} ({self.compact_value}{self.suit.compact})"
 
+    @property
+    def unicode_card(self):
+        return chr(self.suit.unicode_card_codepoint + "A23456789TJQK".index(self.compact_value))
+
+    @property
+    def unicode_suit_card(self):
+        return self.suit.unicode_suit_char + self.compact_value
+    @property
+    def suit_card(self):
+        return self.suit.compact_repr + self.compact_value
 
 class CardDeck:
     """
