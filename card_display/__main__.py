@@ -9,18 +9,19 @@ def validate_hand_count(answers, current):
     except ValueError:
         return False
 
+
 # A list of questions to ask the user before starting
 questions = [
-    inquirer.List('game',
-        message = "What game are we playing?",
-        choices = [
-            (klass.name, klass)
-            for klass in subclass_recursive(Game)
-        ]
-        ),
-    inquirer.Text('hand count',
-        message = "How many {game.name} hands would you like to deal?",
-        validate = validate_hand_count)
+    inquirer.List(
+        "game",
+        message="What game are we playing?",
+        choices=[(klass.name, klass) for klass in subclass_recursive(Game)],
+    ),
+    inquirer.Text(
+        "hand count",
+        message="How many {game.name} hands would you like to deal?",
+        validate=validate_hand_count,
+    ),
 ]
 
 # Ask the questions to the user

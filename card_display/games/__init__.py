@@ -21,7 +21,7 @@ class Game(abc.ABC):
     def __init__(self):
         self.deck = CardDeck.from_file(Path(__file__).parent / self.deck_file)
 
-    def deal_hand(self) ->  Generator[None, Card, None]:
+    def deal_hand(self) -> Generator[None, Card, None]:
         """
         Deals a hand of hand_count size
         """
@@ -31,6 +31,7 @@ class Game(abc.ABC):
     @abc.abstractmethod
     def calculate_hand_points(self, cards: List[Card]):
         pass
+
 
 class BridgeGame(Game):
     name = "Bridge"
@@ -49,18 +50,17 @@ class BridgeGame(Game):
             scores.get(card.compact_value, 0)
             for card in cards   
         ])
-        
+
 
 class OtherBridgeGame(Game):
     name = "Other Bridge"
-    hand_count = 10
+    hand_count = 13
     deck_file = "bridge1.txt"
-    max_hands_per_deck = 52//10
-
+    max_hands_per_deck = 52 // 13
 
     def calculate_hand_points(self, cards: List[Card]):
         return len(cards)
-        
+
 
 if __name__ == "__main__":
     print(list(BridgeGame().deal_hand()))

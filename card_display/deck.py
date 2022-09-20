@@ -1,13 +1,12 @@
-
 from pathlib import Path
 import random
 from typing import Generator
+
 
 class CardSuit:
     """
     Represents a card suit
     """
-
 
     def __init__(self, compact_repr: str, full_repr: str):
         """
@@ -62,30 +61,34 @@ class CardSuit:
             return "♣"
         raise TypeError("This card type does not have an associated card suit")
 
+
 class Card:
     """
     Represents a single card, with a suit and value
     """
 
-
     def __init__(self, suit: CardSuit, compact_value: str, full_value: str):
         self.suit = suit
         self.compact_value = compact_value
-        self.full_value = full_value       
+        self.full_value = full_value
 
     def __repr__(self) -> str:
         return f"{self.full_value} of {self.suit.name} ({self.compact_value}{self.suit.compact})"
 
     @property
     def unicode_card(self):
-        return chr(self.suit.unicode_card_codepoint + "A23456789TJQK".index(self.compact_value))
+        return chr(
+            self.suit.unicode_card_codepoint + "A23456789TJQK".index(self.compact_value)
+        )
 
     @property
     def unicode_suit_card(self):
         return self.suit.unicode_suit_char + self.compact_value
+
     @property
     def suit_card(self):
         return self.suit.compact_repr + self.compact_value
+
 
 class CardDeck:
     """
@@ -98,13 +101,12 @@ class CardDeck:
 
         self.shuffle()
 
-
     def shuffle(self):
         """
         Collect back all the delt cards back into the deck, then shuffle the deck
         """
 
-        self.cards = self._cards[::] # copy the list of cards
+        self.cards = self._cards[::]  # copy the list of cards
         random.shuffle(self.cards)  # shuffle all the cards
 
     def deal_card(self) -> Card:
@@ -120,7 +122,6 @@ class CardDeck:
         for _ in range(n):
             yield self.deal_card()
 
-
     @classmethod
     def from_string(cls, deck_file_content: str, cards_file_content: str):
         """
@@ -128,7 +129,6 @@ class CardDeck:
         """
 
         # Get the individual lines from the deck file
-
 
         cards_file_name, card_count, *suit_values = deck_file_content.splitlines()
 
@@ -141,25 +141,26 @@ class CardDeck:
             for compact_repr, full_repr in [line.split(",") for line in suit_values]
         ]
 
-        possible_suits_dict = {
-            suit.deck_listing: suit
-            for suit in possible_suits
-        }
+        possible_suits_dict = {suit.deck_listing: suit for suit in possible_suits}
 
         # Create each card
         cards = [
-            Card(possible_suits_dict[suit], possible_suits_dict[value].compact, possible_suits_dict[value].name)
+            Card(
+                possible_suits_dict[suit],
+                possible_suits_dict[value].compact,
+                possible_suits_dict[value].name,
+            )
             for value, suit in [
-                (cards_file_content[2*i:2*i+1], cards_file_content[2*i+1:2*i+2])
+                (
+                    cards_file_content[2 * i : 2 * i + 1],
+                    cards_file_content[2 * i + 1 : 2 * i + 2],
+                )
                 for i in range(card_count)
             ]
         ]
 
         # Get all used suits
-        suits = {
-            card.suit
-            for card in cards
-        }
+        suits = {card.suit for card in cards}
 
         return cls(list(suits), cards)
 
@@ -177,18 +178,12 @@ class CardDeck:
 
         return cls.from_string(deck_file_contents, cards_file_contents)
 
-
-
-
-        
-
     def __str__(self) -> str:
         return "\n".join([str(card) for card in self.cards])
 
 
 if __name__ == "__main__":
     d = CardDeck.from_file(Path(__file__).parent / "games" / "bridge1.txt")
-    
 
     for card in d.deal_cards(5):
         print(card)
