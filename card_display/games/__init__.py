@@ -34,13 +34,21 @@ class Game(abc.ABC):
 
 class BridgeGame(Game):
     name = "Bridge"
-    hand_count = 10
+    hand_count = 13
     deck_file = "bridge1.txt"
-    max_hands_per_deck = 52//10
-
+    max_hands_per_deck = 52 // 13
 
     def calculate_hand_points(self, cards: List[Card]):
-        return len(cards)
+        scores = {
+            'A': 4,
+            'K': 3,
+            'Q': 2,
+            'J': 1
+        }
+        return sum([
+            scores.get(card.compact_value, 0)
+            for card in cards   
+        ])
         
 
 class OtherBridgeGame(Game):
