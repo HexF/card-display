@@ -43,6 +43,7 @@ class BridgeGame(Game):
         scores = {"A": 4, "K": 3, "Q": 2, "J": 1}
         return sum([scores.get(card.compact_value, 0) for card in cards])
 
+
 """
 Another game could be implemented like this:
 

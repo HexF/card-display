@@ -93,12 +93,10 @@ LOAD_CASES = [
             """
         ),
         "ASKSQSJSTS9S8S7S6S5S4S3S2SAHKHQHJHTH9H8H7H6H5H4H3H2HADKDQDJDTD9D8D7D6D5D4D3D2DACKCQCJCTC9C8C7C6C5C4C3C",
-        {
-            repr(card) for card in CARDS
-            if repr(card) != "Two of Clubs (2C)"
-        },
-    )
+        {repr(card) for card in CARDS if repr(card) != "Two of Clubs (2C)"},
+    ),
 ]
+
 
 class TestCardSuit:
     suit_spades = CardSuit("S", "Spades")
@@ -230,7 +228,9 @@ class TestClassDeck:
         with pytest.raises(expect_error):
             assert len(list(self.deck.deal_cards(deal_count))) == expected_cards
 
-    @pytest.mark.parametrize("deck_file_content, cards_file_content, card_names", LOAD_CASES)
+    @pytest.mark.parametrize(
+        "deck_file_content, cards_file_content, card_names", LOAD_CASES
+    )
     def test_deck_loading_str(
         self, deck_file_content: str, cards_file_content: str, card_names: set[str]
     ):
@@ -239,19 +239,24 @@ class TestClassDeck:
         actual_card_names = set(repr(card) for card in deck.cards)
         assert len(actual_card_names.intersection(card_names)) == len(card_names)
 
-    @pytest.mark.parametrize("deck_file_content, cards_file_content, card_names", LOAD_CASES)
+    @pytest.mark.parametrize(
+        "deck_file_content, cards_file_content, card_names", LOAD_CASES
+    )
     def test_deck_loading_file(
-        self, deck_file_content: str, cards_file_content: str, card_names: set[str], tmp_path: Path
+        self,
+        deck_file_content: str,
+        cards_file_content: str,
+        card_names: set[str],
+        tmp_path: Path,
     ):
         deck_file = tmp_path / "deck.txt"
         card_file = tmp_path / deck_file_content.splitlines()[0]
 
         deck_file.write_text(deck_file_content)
         card_file.write_text(cards_file_content)
-        
+
         deck = CardDeck.from_file(deck_file)
 
         actual_card_names = set(repr(card) for card in deck.cards)
-        print(LOAD_CASES)
+
         assert len(actual_card_names.intersection(card_names)) == len(card_names)
-       
