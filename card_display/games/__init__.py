@@ -40,17 +40,11 @@ class BridgeGame(Game):
     max_hands_per_deck = 52 // 13
 
     def calculate_hand_points(self, cards: List[Card]):
-        scores = {
-            'A': 4,
-            'K': 3,
-            'Q': 2,
-            'J': 1
-        }
-        return sum([
-            scores.get(card.compact_value, 0)
-            for card in cards   
-        ])
+        scores = {"A": 4, "K": 3, "Q": 2, "J": 1}
+        return sum([scores.get(card.compact_value, 0) for card in cards])
 
+"""
+Another game could be implemented like this:
 
 class OtherBridgeGame(Game):
     name = "Other Bridge"
@@ -60,6 +54,7 @@ class OtherBridgeGame(Game):
 
     def calculate_hand_points(self, cards: List[Card]):
         return len(cards)
+"""
 
 
 if __name__ == "__main__":

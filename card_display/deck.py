@@ -119,6 +119,8 @@ class CardDeck:
         """
         Return n cards from the deck
         """
+        if n <= 0:
+            raise ValueError("Cannot deal negative or zero integer number of cards")
         for _ in range(n):
             yield self.deal_card()
 
@@ -152,8 +154,8 @@ class CardDeck:
             )
             for value, suit in [
                 (
-                    cards_file_content[2 * i : 2 * i + 1],
-                    cards_file_content[2 * i + 1 : 2 * i + 2],
+                    cards_file_content[2 * i + 0 : 2 * i + 1],  # 1st character in pair
+                    cards_file_content[2 * i + 1 : 2 * i + 2],  # 2nd character in pair
                 )
                 for i in range(card_count)
             ]
